@@ -6,9 +6,16 @@ cabecera(){
 }
 
 crearCategoria(){
+echo '### CREAR CATEGORIA ###'
+    echo ''
 
+clear
 echo 'Crear Categoria'
-read -n 1 -p
+read -n 1 -p "Dime el nombre del archivo: " nomArch
+	if [[ nomArch == nomArch ]];then
+		cd $HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/ListaCat
+		touch $nomArch.txt 
+	fi
 
 
 }
@@ -23,9 +30,10 @@ menu(){
 	   crearCategoria
 	elif [[ $opcion == 'X' || $opcion == 'x' ]]; then
 		bash "$HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/menu.sh"
+		break
 	fi
-
-	done
+     
+done
 }
 
 menu
