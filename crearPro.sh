@@ -6,18 +6,15 @@ cabecera(){
 }
 
 crearCategoria(){
-echo '### CREAR CATEGORIA ###'
-    echo ''
-
 clear
-echo 'Crear Categoria'
-read -n 1 -p "Dime el nombre del archivo: " nomArch
-	if [[ nomArch == nomArch ]];then
-		cd $HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/ListaCat
-		touch $nomArch.txt 
-	fi
+echo '### CREAR CATEGORIA ###'
+echo ''
 
+read -p 'Dame el nombre de la categoria a crear: ' nombre
 
+if [[ $nombre != "" ]]; then
+    mkdir $nombre
+fi
 }
 
 menu(){
