@@ -16,9 +16,9 @@ echo '3.Salir'
 echo ''
 read -n 1 -p "Elige una opción: " opcion
 if [[ $opcion == '1' ]]; then
-    	bash "$HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/crearPro.sh" 
+    	bash crearPro.sh
 elif [[ $opcion == '2' ]]; then
-    	bash "$HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/buscarPro.sh" 
+    	bash buscarPro.sh
 elif [[ $opcion == '3' ]]; then
 	echo ""
     	read -n 1 -p "Realmente deseas salir?[s/n] " opcion
