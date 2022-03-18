@@ -4,6 +4,7 @@ clear
 
 echo "Mostrar codigo"
 echo ""
+listadoCod
 read -p "Dime el articulo a mostrar: " codArt
 echo ""
 echo ""
@@ -66,6 +67,34 @@ if [[ -d  ${bCategoria^^} ]]; then
 	buscarMarca
 fi
 
+
+}
+
+listadoCod() {
+
+touch ../listaco.txt
+tree -L 1 -i > ../listaco.txt
+sed -i '1d' ../listaco.txt # eliminar la primera linea
+sed -i '/^$/d' ../listaco.txt #eliminar espacios en blanco 
+sed -i '$ d' ../listaco.txt # elimina la ultima linea
+sed -i 's/[a-z]/\U&/g' ../listaco.txt #cambia todos los caracteres de minuscula a mayuscula
+
+n=1
+
+while [[ true ]]; do
+    sed -i "$n ""s/^/""$n""./" ../listaco.txt
+    n=$((n+1))
+
+    #capturar la linea para saber si tiene algo escrito
+    #en caso de no tener nada, para al bucle
+    linea=$( sed -n "$n""p" ../listaco.txt )
+    if [[ $linea == "" ]]; then
+        break
+    fi
+done
+
+
+cat ../listaco.txt
 
 }
 

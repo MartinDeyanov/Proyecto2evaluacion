@@ -23,29 +23,29 @@ fi
 
 listadoCod() {
 
-touch otros.txt
-tree -L 1 -i > otros.txt
-sed -i '1d' otros.txt # eliminar la primera linea
-sed -i '/^$/d' otros.txt #eliminar espacios en blanco 
-sed -i '$ d' otros.txt # elimina la ultima linea
-sed -i 's/[a-z]/\U&/g' otros.txt #cambia todos los caracteres de minuscula a mayuscula
+touch ../otros.txt
+tree -L 1 -i > ../otros.txt
+sed -i '1d' ../otros.txt # eliminar la primera linea
+sed -i '/^$/d' ../otros.txt #eliminar espacios en blanco 
+sed -i '$ d' ../otros.txt # elimina la ultima linea
+sed -i 's/[a-z]/\U&/g' ../otros.txt #cambia todos los caracteres de minuscula a mayuscula
 
 n=1
 
 while [[ true ]]; do
-    sed -i "$n ""s/^/""$n""./" otros.txt
+    sed -i "$n ""s/^/""$n""./" ../otros.txt
     n=$((n+1))
 
     #capturar la linea para saber si tiene algo escrito
     #en caso de no tener nada, para al bucle
-    linea=$( sed -n "$n""p" otros.txt )
+    linea=$( sed -n "$n""p" ../otros.txt )
     if [[ $linea == "" ]]; then
         break
     fi
 done
 
 
-cat otros.txt
+cat ../otros.txt
 
 }
 

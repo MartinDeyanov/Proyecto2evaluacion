@@ -7,9 +7,9 @@ echo ""
 
 read -p 'Dame el nombre de la categoria a crear: ' nombre
 cd "CATEGORIAS"
-mkdir $nombre
+mkdir ${nombre^^}
 
-if [[ -d $nombre ]]; then
+if [[ -d ${nombre^^} ]]; then
 	crearMarca
 fi
 
