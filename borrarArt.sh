@@ -7,8 +7,8 @@ cat lista.txt
 
 read -p "Dime la categoria a la que quieres ir: " categoria
 
-if [[ -d $categoria ]]; then
-	cd $categoria
+if [[ -d ${categoria^^} ]]; then
+	cd ${categoria^^}
 	irMarca
 else 
             echo 'El nombre no puede estar vacio'
@@ -18,6 +18,34 @@ else
             fi
 fi
 	
+
+}
+
+listadoCod() {
+
+touch otros.txt
+tree -L 1 -i > otros.txt
+sed -i '1d' otros.txt # eliminar la primera linea
+sed -i '/^$/d' otros.txt #eliminar espacios en blanco 
+sed -i '$ d' otros.txt # elimina la ultima linea
+sed -i 's/[a-z]/\U&/g' otros.txt #cambia todos los caracteres de minuscula a mayuscula
+
+n=1
+
+while [[ true ]]; do
+    sed -i "$n ""s/^/""$n""./" otros.txt
+    n=$((n+1))
+
+    #capturar la linea para saber si tiene algo escrito
+    #en caso de no tener nada, para al bucle
+    linea=$( sed -n "$n""p" otros.txt )
+    if [[ $linea == "" ]]; then
+        break
+    fi
+done
+
+
+cat otros.txt
 
 }
 
@@ -31,14 +59,14 @@ cat lista.txt
 
 read -p "Dime la categoria a la que quieres ir: " categoria
 
-if [[ -d $categoria ]]; then
-	cd $categoria
+if [[ -d ${categoria^^} ]]; then
+	cd ${categoria^^}
 	irMarca
 else 
             echo 'La categoria no existe, pulsa N para ir a la creacion de categorias '
             read -n 1 -p "o pulsa m para volver a intentar :" result
             if [[ $result == 'n' || $result == 'N' ]]; then
-                cd ../
+                cd CATEGORIAS
 		bash crearPro.sh
 	    elif [[ $result == 'M' || $result == 'm' ]]; then
 		cd ../
@@ -61,8 +89,8 @@ cat lista.txt
 
 read -p "Dime la marca a la que quieres ir: " marca
 
-if [[ -d $marca ]]; then
-	cd $marca
+if [[ -d ${marca^^} ]]; then
+	cd ${marca^^} 
 	borrarArchivos
 else 
             echo 'El nombre no puede estar vacio'
@@ -106,6 +134,7 @@ clear
 echo ' '
 echo 'BORRAR ARTICULO'
 echo ' '
+listadoCod
 echo ' '
 read -p "Escribe el codigo de articulo a borrar:  " codigo
 

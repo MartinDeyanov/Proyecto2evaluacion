@@ -4,6 +4,8 @@ clear
 
 echo "Mostrar codigo"
 echo ""
+listadoMod
+echo ""
 read -p "Dime el articulo a mostrar: " codArt
 echo ""
 echo ""
@@ -69,6 +71,36 @@ fi
 
 }
 
+listadoMod() {
+
+cd "CATEGORIAS/${categoria^^}/${marca^^}"
+touch listaM.txt
+tree -L 1 -i > listaM.txt
+sed -i '1d' listaM.txt # eliminar la primera linea
+sed -i '/^$/d' listaM.txt #eliminar espacios en blanco 
+sed -i '$ d' listaM.txt # elimina la ultima linea
+sed -i 's/[a-z]/\U&/g' listaM.txt #cambia todos los caracteres de minuscula a mayuscula
+
+n=1
+
+while [[ true ]]; do
+    sed -i "$n ""s/^/""$n""./" listaM.txt
+    n=$((n+1))
+
+    #capturar la linea para saber si tiene algo escrito
+    #en caso de no tener nada, para al bucle
+    linea=$( sed -n "$n""p" listaM.txt )
+    if [[ $linea == "" ]]; then
+        break
+    fi
+done
+
+
+cat listaM.txt
+
+}
+
+
 listadoMarca() {
 
 touch lista.txt
@@ -99,7 +131,7 @@ cat lista.txt
 
 listadoCat() {
 
-cd CATEGORIAS
+
 
 touch lista.txt
 tree -L 1 -d -i > lista.txt

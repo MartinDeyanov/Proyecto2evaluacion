@@ -16,49 +16,73 @@ fi
 }
 
 listadoMar() {
+if [[ -d ${opcion^^} ]]; then
+	cd ${opcion^^} 
+	tree -L 1 -d -i > lista.txt
+	sed -i '1d' lista.txt # eliminar la primera linea
+	sed -i '/^$/d' lista.txt #eliminar espacios en blanco 
+	sed -i '$ d' lista.txt # elimina la ultima linea
+	sed -i 's/[a-z]/\U&/g' lista.txt #cambia todos los caracteres de minuscula a mayuscula
 
-cd $opcion
-tree -L 1 -d -i > lista.txt
-sed -i '1d' lista.txt # eliminar la primera linea
-sed -i '/^$/d' lista.txt #eliminar espacios en blanco 
-sed -i '$ d' lista.txt # elimina la ultima linea
-sed -i 's/[a-z]/\U&/g' lista.txt #cambia todos los caracteres de minuscula a mayuscula
+	n=1
 
-n=1
+	while [[ true ]]; do
+	    sed -i "$n ""s/^/""$n""./" lista.txt
+	    n=$((n+1))
 
-while [[ true ]]; do
-    sed -i "$n ""s/^/""$n""./" lista.txt
-    n=$((n+1))
-
-    #capturar la linea para saber si tiene algo escrito
-    #en caso de no tener nada, para al bucle
-    linea=$( sed -n "$n""p" lista.txt )
-    if [[ $linea == "" ]]; then
-        break
-    fi
-done
-
-
+	    #capturar la linea para saber si tiene algo escrito
+	    #en caso de no tener nada, para al bucle
+	    linea=$( sed -n "$n""p" lista.txt )
+	    if [[ $linea == "" ]]; then
+		break
+	    fi
+	done
 cat lista.txt
+else
+	tree -L 1 -d -i > lista.txt
+	sed -i '1d' lista.txt # eliminar la primera linea
+	sed -i '/^$/d' lista.txt #eliminar espacios en blanco 
+	sed -i '$ d' lista.txt # elimina la ultima linea
+	sed -i 's/[a-z]/\U&/g' lista.txt #cambia todos los caracteres de minuscula a mayuscula
+
+	n=1
+
+	while [[ true ]]; do
+	    sed -i "$n ""s/^/""$n""./" lista.txt
+	    n=$((n+1))
+
+	    #capturar la linea para saber si tiene algo escrito
+	    #en caso de no tener nada, para al bucle
+	    linea=$( sed -n "$n""p" lista.txt )
+	    if [[ $linea == "" ]]; then
+		break
+	    fi
+	done
+cat lista.txt
+
+fi
+	
+
 
 }
 
 nuevoArticulo() {
 clear
-echo "### CATEGORIA $opcion ###"
-echo "### MARCA $marca ###"
+echo "### CATEGORIA ${opcion^^}  ###"
+echo "### MARCA ${marca^^} ###"
 echo ""
-echo ""
+echo "-----------------------------------------------------------------------------"
 read -p 'Dame el codigo del articulo: ' codigoArt
 read -p 'Descripcion: ' descripcion
 read -p 'Talla (XS/S/M/L) : ' tallas
 read -p 'Precio: ' precio
 read -p 'Stock: ' stock
-
+echo "-----------------------------------------------------------------------------"
 touch $codigoArt
 
 echo ""
 echo ""
+echo "-----------------------------------------------------------------------------"
 echo "CODIGO $codigoArt" > $codigoArt
 echo "Descripcion: $descripcion" >> $codigoArt
 echo "Talla (XS/S/M/L) : $tallas" >> $codigoArt
@@ -70,7 +94,8 @@ cat $codigoArt
 
 read -n 1 -p "Deseas volver a crear otro articulo: [s/n]" eleccion
 if [[ $eleccion == 'N' || $eleccion == 'n' ]]; then
-	break
+	cd ../
+	bash menu.sh
 elif [[ $eleccion == 'S' || $eleccion == 's' ]]; then
 	articulo
 else
@@ -82,8 +107,8 @@ fi
 
 articulo() {
 clear
-echo "### CATEGORIA $opcion ###"
-echo "### MARCA $marca ###"
+echo "### CATEGORIA ${opcion^^}  ###"
+echo "### MARCA ${marca^^} ###"
 echo ""
 echo "-----------------------------------------------------------------------------"
 read -p 'Dame el codigo del articulo: ' codigoArt
@@ -94,7 +119,7 @@ read -p 'Stock: ' stock
 echo "-----------------------------------------------------------------------------"
 echo ""
 echo ""
-cd $marca
+cd ${marca^^}
 touch $codigoArt
 
 echo "-----------------------------------------------------------------------------"
@@ -119,8 +144,9 @@ fi
 }
 
 crearMarca() {
+while [[ true ]]; do
 	clear
-	echo "### CREAR MARCA $opcion ###"
+	echo "### CREAR MARCA ${opcion^^}  ###"
 	echo ""
 	echo ""
 	listadoMar
@@ -129,28 +155,24 @@ crearMarca() {
 	read -p 'Dame el nombre de la categoria a crear: ' marca
 	
 	
-	if [[ -d $marca ]]; then
+	if [[ -d ${marca^^}  ]]; then
 		articulo
 	fi
 	
-	if [[ "" != $marca ]]; then
+	if [[ "" != ${marca^^}  ]]; then
 	echo "Esta marca no existe"
 	read -n 1 -p "¿Deseas crear una nueva marca? [s/n]" result
 		if [[ $result == 's' || $result == 'S' ]]; then
-			mkdir $marca
+			mkdir ${marca^^} 
 		elif [[ $result == 'n' || $result == 'N' ]]; then
-			break
+			crearMarca
 		fi
 	
 	fi
-	
-	
-
+done
 }
 
 listadoCat() {
-
-cd "$HOME/Escritorio/Proyecto2evaluacion/CATEGORIAS/"
 
 touch lista.txt
 tree -L 1 -d -i > lista.txt
@@ -182,24 +204,24 @@ while [[ true ]]; do
 	clear
 	echo '### TIPO DE ROPA ###'
 	echo ''
-	echo 'Para crear una categoria pulsa N, para volver al menu pulsa X'
+	echo 'Para crear una categoria nueva Escribela, para volver al menu pulsa X'
 	echo ""
 	listadoCat
 	echo ''
 
 	read -p "Categoria: " opcion
-	if [[ -d $opcion ]]; then
-		cd "CATEGORIAS/$opcion"
+	if [[ -d ${opcion^^}  ]]; then
+		cd "CATEGORIAS/${opcion^^} "
 		crearMarca
 	elif [[ $opcion == 'X' || $opcion == 'x' ]]; then
 		cd ../
 		bash menu.sh
 		break
-	elif [[ "" != $opcion ]]; then
+	elif [[ "" != ${opcion^^}  ]]; then
 	echo "Esta categoria no existe"
 	read -n 1 -p "¿Deseas crear una nueva categoria? [s/n]" result
 		if [[ $result == 's' || $result == 'S' ]]; then
-			mkdir $opcion
+			mkdir ${opcion^^}
 		elif [[ $result == 'n' || $result == 'N' ]]; then
 			break
 		fi
