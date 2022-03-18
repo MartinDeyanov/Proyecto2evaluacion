@@ -2,7 +2,8 @@
 crearCategoria(){
 clear
 echo '### CREAR CATEGORIA ###'
-
+echo ""
+echo ""
 
 read -p 'Dame el nombre de la categoria a crear: ' nombre
 cd "CATEGORIAS"
@@ -15,6 +16,7 @@ fi
 }
 
 listadoMar() {
+
 cd $opcion
 tree -L 1 -d -i > lista.txt
 sed -i '1d' lista.txt # eliminar la primera linea
@@ -41,22 +43,115 @@ cat lista.txt
 
 }
 
+nuevoArticulo() {
+clear
+echo "### CATEGORIA $opcion ###"
+echo "### MARCA $marca ###"
+echo ""
+echo ""
+read -p 'Dame el codigo del articulo: ' codigoArt
+read -p 'Descripcion: ' descripcion
+read -p 'Talla (XS/S/M/L) : ' tallas
+read -p 'Precio: ' precio
+read -p 'Stock: ' stock
+
+touch $codigoArt
+
+echo ""
+echo ""
+echo "CODIGO $codigoArt" > $codigoArt
+echo "Descripcion: $descripcion" >> $codigoArt
+echo "Talla (XS/S/M/L) : $tallas" >> $codigoArt
+echo "Precio: $precio"  >> $codigoArt
+echo "Stock: $stock" >> $codigoArt
+echo ""
+echo ""
+cat $codigoArt
+
+read -n 1 -p "Deseas volver a crear otro articulo: [s/n]" eleccion
+if [[ $eleccion == 'N' || $eleccion == 'n' ]]; then
+	break
+elif [[ $eleccion == 'S' || $eleccion == 's' ]]; then
+	articulo
+else
+	read -n 1 -p "Esta opcion no es valida"
+fi
+
+}
+
+
+articulo() {
+clear
+echo "### CATEGORIA $opcion ###"
+echo "### MARCA $marca ###"
+echo ""
+echo "-----------------------------------------------------------------------------"
+read -p 'Dame el codigo del articulo: ' codigoArt
+read -p 'Descripcion: ' descripcion
+read -p 'Talla (XS/S/M/L) : ' tallas
+read -p 'Precio: ' precio
+read -p 'Stock: ' stock
+echo "-----------------------------------------------------------------------------"
+echo ""
+echo ""
+cd $marca
+touch $codigoArt
+
+echo "-----------------------------------------------------------------------------"
+echo "CODIGO $codigoArt" > $codigoArt
+echo "Descripcion: $descripcion" >> $codigoArt
+echo "Talla (XS/S/M/L) : $tallas" >> $codigoArt
+echo "Precio: $precio"  >> $codigoArt
+echo "Stock: $stock" >> $codigoArt
+echo ""
+cat $codigoArt
+echo "-----------------------------------------------------------------------------"
+read -n 1 -p "Deseas volver a crear otro articulo: [s/n]" eleccion
+if [[ $eleccion == 'N' || $eleccion == 'n' ]]; then
+	cd ../../../
+	bash menu.sh
+elif [[ $eleccion == 'S' || $eleccion == 's' ]]; then
+	nuevoArticulo
+else
+	read -n 1 -p "Esta opcion no es valida"
+fi
+
+}
+
 crearMarca() {
 	clear
 	echo "### CREAR MARCA $opcion ###"
-
+	echo ""
+	echo ""
 	listadoMar
-
+	echo ""
+	echo ""
 	read -p 'Dame el nombre de la categoria a crear: ' marca
-	mkdir $marca
-
+	
+	
+	if [[ -d $marca ]]; then
+		articulo
+	fi
+	
+	if [[ "" != $marca ]]; then
+	echo "Esta marca no existe"
+	read -n 1 -p "¿Deseas crear una nueva marca? [s/n]" result
+		if [[ $result == 's' || $result == 'S' ]]; then
+			mkdir $marca
+		elif [[ $result == 'n' || $result == 'N' ]]; then
+			break
+		fi
+	
+	fi
+	
 	
 
 }
 
 listadoCat() {
 
-cd "$HOME/Escritorio/repositorioProyecto/Proyecto2evaluacion/CATEGORIAS"
+cd "$HOME/Escritorio/Proyecto2evaluacion/CATEGORIAS/"
+
 touch lista.txt
 tree -L 1 -d -i > lista.txt
 sed -i '1d' lista.txt # eliminar la primera linea
@@ -88,24 +183,32 @@ while [[ true ]]; do
 	echo '### TIPO DE ROPA ###'
 	echo ''
 	echo 'Para crear una categoria pulsa N, para volver al menu pulsa X'
+	echo ""
 	listadoCat
 	echo ''
 
 	read -p "Categoria: " opcion
-	if [[ $opcion == 'N' || $opcion == 'n' ]]; then
-		crearCategoria
+	if [[ -d $opcion ]]; then
+		cd "CATEGORIAS/$opcion"
+		crearMarca
 	elif [[ $opcion == 'X' || $opcion == 'x' ]]; then
 		cd ../
 		bash menu.sh
 		break
-	elif [[ -d $opcion ]]; then
-		cd "CATEGORIAS/$opcion"
-		crearMarca
-	else
-		read -n 1 -p "Esta opcion no es valida"
+	elif [[ "" != $opcion ]]; then
+	echo "Esta categoria no existe"
+	read -n 1 -p "¿Deseas crear una nueva categoria? [s/n]" result
+		if [[ $result == 's' || $result == 'S' ]]; then
+			mkdir $opcion
+		elif [[ $result == 'n' || $result == 'N' ]]; then
+			break
+		fi
+	
 	fi
+	
      
 done
+
 
 
 
