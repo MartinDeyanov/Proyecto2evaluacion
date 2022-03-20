@@ -32,6 +32,8 @@ elif [[ $opcion == '5' ]]; then
     	read -n 1 -p "Realmente deseas salir?[s/n] " opcion
    	if [[ $opcion == 's' || $opcion == 'S' ]]; then
         	break
+        else 
+        	echo ""
         fi
 fi
 done

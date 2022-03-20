@@ -123,6 +123,7 @@ fi
 
 
 articulo() {
+
 clear
 echo "### CATEGORIA ${opcion^^}  ###"
 echo "### MARCA ${marca^^} ###"
@@ -132,38 +133,61 @@ echo ""
 echo "-----------------------------------------------------------------------------"
 read -p 'Dame el codigo del articulo: ' codigoArt
 echo ""
-cat $codigoArt
-echo ""
-echo "Dame la modificacion del producto: "
-read -p 'Descripcion: ' descripcion
-read -p 'Talla (XS/S/M/L) : ' tallas
-read -p 'Precio: ' precio
-read -p 'Stock: ' stock
-echo "-----------------------------------------------------------------------------"
-echo ""
-echo ""
-cd ${marca^^}
-touch $codigoArt
 
-echo "-----------------------------------------------------------------------------"
-echo "CODIGO $codigoArt" > $codigoArt
-echo "Descripcion: $descripcion" >> $codigoArt
-echo "Talla (XS/S/M/L) : $tallas" >> $codigoArt
-echo "Precio: $precio"  >> $codigoArt
-echo "Stock: $stock" >> $codigoArt
-echo ""
-cat $codigoArt
-echo "-----------------------------------------------------------------------------"
-read -n 1 -p "Deseas volver a crear otro articulo: [s/n]" eleccion
-if [[ $eleccion == 'N' || $eleccion == 'n' ]]; then
-	cd ../../../
-	bash menu.sh
-elif [[ $eleccion == 'S' || $eleccion == 's' ]]; then
-	nuevoArticulo
-else
-	read -n 1 -p "Esta opcion no es valida"
-fi
+	if [[ -a $codigoArt  ]]; then
+	modificarArticulo
+	fi
+	
+	if [[ "" != $codigoArt  ]]; then
+	echo "Este codigo no existe"
+	read -n 1 -p "¿Deseas volver a intentarlo? [s/n]" result
+		if [[ $result == 's' || $result == 'S' ]]; then
+			cd ../
+			articulo
+		elif [[ $result == 'n' || $result == 'N' ]]; then
+			cd ../../../
+			bash menu.sh
+		fi
+	
+	fi
 
+}
+
+modificarArticulo(){
+
+cat $codigoArt
+		echo ""
+		echo "Dame la modificacion del producto: "
+		read -p 'Descripcion: ' descripcion
+		read -p 'Talla (XS/S/M/L) : ' tallas
+		read -p 'Precio: ' precio
+		read -p 'Stock: ' stock
+		echo "-----------------------------------------------------------------------------"
+		echo ""
+		echo ""
+		clear
+		echo "Datos nuevos del producto modificado: "
+		touch $codigoArt
+
+		echo "-----------------------------------------------------------------------------"
+		echo "CODIGO $codigoArt" > $codigoArt
+		echo "Descripcion: $descripcion" >> $codigoArt
+		echo "Talla (XS/S/M/L) : $tallas" >> $codigoArt
+		echo "Precio: $precio"  >> $codigoArt
+		echo "Stock: $stock" >> $codigoArt
+		echo ""
+		cat $codigoArt
+		echo "-----------------------------------------------------------------------------"
+		read -n 1 -p "Deseas volver a modificar otro articulo: [s/n]" eleccion
+		if [[ $eleccion == 'N' || $eleccion == 'n' ]]; then
+			cd ../../../
+			bash menu.sh
+		elif [[ $eleccion == 'S' || $eleccion == 's' ]]; then
+			cd ../
+			articulo
+		else
+			read -n 1 -p "Esta opcion no es valida"
+		fi
 }
 
 crearMarca() {

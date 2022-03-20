@@ -54,9 +54,11 @@ while [[ true ]]; do
 clear
 cd CATEGORIAS
 echo "Ir a Categoria"
-
+echo " "
+echo " "
 cat lista.txt
-
+echo " "
+echo " "
 read -p "Dime la categoria a la que quieres ir: " categoria
 
 if [[ -d ${categoria^^} ]]; then
@@ -84,9 +86,11 @@ while [[ true ]]; do
 clear
 
 echo "Ir a Marca"
-
+echo " "
+echo " "
 cat lista.txt
-
+echo " "
+echo " "
 read -p "Dime la marca a la que quieres ir: " marca
 
 if [[ -d ${marca^^} ]]; then
@@ -139,21 +143,21 @@ echo ' '
 read -p "Escribe el codigo de articulo a borrar:  " codigo
 
 
-if [[ $codigo == $codigo ]]; then
+if [[ -a $codigo ]]; then
 	find $codigo
 	confirmacion
-elif [[ $codigo == "1" ]]; then
+elif [[ "" != $codigo ]]; then
+	echo ""
 	echo "No existe el producto"
-	read -n 1 -p "Pulsa una tecla para volver..." tecla
-	if [[ $tecla == 'm' || $tecla == 'M' ]]; then
-		cd ../../..
+	echo ""
+	read -n 1 -p "Si quiere volver a introducir un codigo pulse cualquier letra, si quiere volver al menú pulse 1" tecla
+	if [[ $tecla == "1" ]]; then
+		cd ../../../
 		bash menu.sh
 	else
-		break
+		echo ""
 	fi
 	
-
-
 fi
 done
 }
